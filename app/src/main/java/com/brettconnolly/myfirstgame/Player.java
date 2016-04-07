@@ -1,7 +1,7 @@
 package com.brettconnolly.myfirstgame;
 
 import android.graphics.Bitmap;
-import android.view.animation.Animation;
+import android.graphics.Canvas;
 
 /**
  * Created by bdcon734 on 4/7/2016.
@@ -24,6 +24,7 @@ public class Player extends GameObject {
         width = w;
 
         Bitmap[] image = new Bitmap[numFrames];
+        spritesheet = res;
 
         for (int i = 0; i < image.length; i++){
             image[i] = Bitmap.createBitmap(spritesheet, i * width, 0, width, height);
@@ -43,8 +44,42 @@ public class Player extends GameObject {
             score++;
             startTime = System.nanoTime();
         }
-    }
-    public void draw(){
+        animation.update();
 
+        if (up){
+            dy = (int) (dya-=1.1);
+        } else {
+            dy = (int) (dya+=1.1);
+        }
+
+        if (dy>14){
+            dy = 14;
+        }
+        if (dy<-14){
+            dy = -14;
+        }
+
+        y += dy*2;
+        dy = 0;
+    }
+    public void draw(Canvas canvas){
+        canvas.drawBitmap(animation.getImage(), x, y, null);
+    }
+    public int getScore(){
+        return score;
+    }
+
+    public boolean getPlaying() {
+        return playing;
+    }
+
+    public void setPlaying(boolean playing) {
+        this.playing = playing;
+    }
+    public void resetDYA(){
+        dya = 0;
+    }
+    public void resetScore(){
+        score = 0;
     }
 }
